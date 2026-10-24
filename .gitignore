@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+dist/
+dist-test/
+out/
+*.vsix
+
+# Editor & OS files
+.DS_Store
+Thumbs.db
+.vscode-test/
+*.log

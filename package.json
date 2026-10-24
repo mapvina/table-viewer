@@ -1,0 +1,176 @@
+{
+  "name": "table-viewer",
+  "displayName": "Table Viewer",
+  "description": "Interactive, high-performance data table viewer and editor for CSV, TSV, Excel (.xlsx, .xls), and SQLite (.db, .sqlite) files.",
+  "version": "1.0.0",
+  "publisher": "mapvina",
+  "author": "MapVina",
+  "icon": "assets/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mapvina/table-viewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mapvina/table-viewer/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Data Science",
+    "Visualization",
+    "Formatters",
+    "Other"
+  ],
+  "keywords": [
+    "csv",
+    "excel",
+    "xlsx",
+    "sqlite",
+    "tsv",
+    "table",
+    "viewer",
+    "grid",
+    "spreadsheet",
+    "data"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "tableViewer.csvEditor",
+        "displayName": "Table Viewer",
+        "selector": [
+          {
+            "filenamePattern": "*.csv"
+          },
+          {
+            "filenamePattern": "*.tsv"
+          },
+          {
+            "filenamePattern": "*.tab"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "tableViewer.excelEditor",
+        "displayName": "Table Viewer (Excel)",
+        "selector": [
+          {
+            "filenamePattern": "*.xlsx"
+          },
+          {
+            "filenamePattern": "*.xls"
+          },
+          {
+            "filenamePattern": "*.xlsm"
+          },
+          {
+            "filenamePattern": "*.xlsb"
+          }
+        ],
+        "priority": "default"
+      },
+      {
+        "viewType": "tableViewer.sqliteEditor",
+        "displayName": "Table Viewer (SQLite)",
+        "selector": [
+          {
+            "filenamePattern": "*.db"
+          },
+          {
+            "filenamePattern": "*.sqlite"
+          },
+          {
+            "filenamePattern": "*.sqlite3"
+          }
+        ],
+        "priority": "default"
+      }
+    ],
+    "commands": [
+      {
+        "command": "tableViewer.openTableViewer",
+        "title": "Open in Table Viewer",
+        "category": "Table Viewer",
+        "icon": "$(table)"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "tableViewer.openTableViewer",
+          "when": "resourceExtname == .csv || resourceExtname == .tsv || resourceExtname == .tab || resourceExtname == .xlsx || resourceExtname == .xls || resourceExtname == .xlsm || resourceExtname == .xlsb || resourceExtname == .db || resourceExtname == .sqlite || resourceExtname == .sqlite3",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "tableViewer.openTableViewer",
+          "when": "resourceExtname == .csv || resourceExtname == .tsv || resourceExtname == .tab || resourceExtname == .xlsx || resourceExtname == .xls || resourceExtname == .xlsm || resourceExtname == .xlsb || resourceExtname == .db || resourceExtname == .sqlite || resourceExtname == .sqlite3",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Table Viewer",
+      "properties": {
+        "tableViewer.defaultPageSize": {
+          "type": "number",
+          "default": 100,
+          "description": "Default number of rows per page in paged mode (0 for virtual scroll mode)."
+        },
+        "tableViewer.enableVirtualization": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable high-speed virtualized scrolling for massive datasets."
+        },
+        "tableViewer.hasHeader": {
+          "type": "boolean",
+          "default": true,
+          "description": "Treat first row as column headers by default."
+        },
+        "tableViewer.autoDetectDelimiter": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect CSV delimiter (, ; tab |)."
+        },
+        "tableViewer.allowEditing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable in-place cell editing."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "compile": "tsc -p ./ --noEmit",
+    "build:extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --target=node18",
+    "build:webview": "esbuild ./src/webview/index.ts --bundle --outfile=dist/webview.js --format=iife --sourcemap --target=chrome100",
+    "build:css": "cp src/webview/style.css dist/style.css",
+    "build:wasm": "cp node_modules/sql.js/dist/sql-wasm.wasm dist/sql-wasm.wasm",
+    "build": "npm run build:extension && npm run build:webview && npm run build:css && npm run build:wasm",
+    "package": "vsce package --no-dependencies",
+    "test": "npx esbuild test/test_core.ts --bundle --platform=node --outfile=dist-test/test_core.js && node dist-test/test_core.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/papaparse": "^5.3.15",
+    "@types/sql.js": "^1.4.11",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0"
+  },
+  "dependencies": {
+    "papaparse": "^5.5.2",
+    "sql.js": "^1.15.1",
+    "xlsx": "^0.18.5"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
+  }
+}

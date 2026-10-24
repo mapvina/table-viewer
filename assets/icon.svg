@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="8" y="8" width="240" height="240" rx="52" fill="url(#bgGrad)" stroke="#334155" stroke-width="2"/>
+
+  <!-- Table Container Card -->
+  <g filter="url(#shadow)">
+    <rect x="36" y="38" width="184" height="180" rx="16" fill="#0f172a" stroke="#475569" stroke-width="2.5"/>
+
+    <!-- Table Header Row -->
+    <rect x="37" y="39" width="182" height="38" rx="14" fill="url(#primaryGrad)"/>
+    <rect x="37" y="62" width="182" height="15" fill="url(#primaryGrad)"/>
+    <line x1="37" y1="77" x2="219" y2="77" stroke="#1e3a8a" stroke-width="2"/>
+
+    <!-- Header Column Dividers -->
+    <line x1="88" y1="39" x2="88" y2="77" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+    <line x1="148" y1="39" x2="148" y2="77" stroke="#60a5fa" stroke-width="1.5" stroke-opacity="0.6"/>
+
+    <!-- Header Labels / Indicators -->
+    <rect x="49" y="52" width="26" height="10" rx="4" fill="#ffffff" fill-opacity="0.95"/>
+    <rect x="99" y="52" width="36" height="10" rx="4" fill="#ffffff" fill-opacity="0.95"/>
+    <rect x="159" y="52" width="40" height="10" rx="4" fill="#ffffff" fill-opacity="0.95"/>
+
+    <!-- Row 1 -->
+    <line x1="37" y1="113" x2="219" y2="113" stroke="#334155" stroke-width="1.5"/>
+    <rect x="49" y="90" width="22" height="8" rx="3" fill="#94a3b8"/>
+    <rect x="99" y="90" width="32" height="8" rx="3" fill="#cbd5e1"/>
+    <rect x="160" y="90" width="28" height="8" rx="3" fill="#38bdf8"/>
+
+    <!-- Row 2 (Zebra stripe) -->
+    <rect x="37.5" y="114" width="181" height="35" fill="#1e293b" fill-opacity="0.6"/>
+    <line x1="37" y1="149" x2="219" y2="149" stroke="#334155" stroke-width="1.5"/>
+    <rect x="49" y="126" width="24" height="8" rx="3" fill="#94a3b8"/>
+    <rect x="99" y="126" width="38" height="8" rx="3" fill="#cbd5e1"/>
+    <rect x="160" y="126" width="34" height="8" rx="3" fill="#10b981"/>
+
+    <!-- Row 3 -->
+    <rect x="49" y="162" width="20" height="8" rx="3" fill="#94a3b8"/>
+    <rect x="99" y="162" width="28" height="8" rx="3" fill="#cbd5e1"/>
+
+    <!-- Vertical Column Grid Lines in Data Area -->
+    <line x1="88" y1="77" x2="88" y2="217" stroke="#334155" stroke-width="1.5"/>
+    <line x1="148" y1="77" x2="148" y2="217" stroke="#334155" stroke-width="1.5"/>
+  </g>
+
+  <!-- Accent Chart Badge Overlay in bottom-right corner -->
+  <g transform="translate(138, 140)" filter="url(#shadow)">
+    <rect x="0" y="0" width="88" height="84" rx="20" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+    <!-- Mini Trend Bars -->
+    <rect x="14" y="52" width="10" height="18" rx="3" fill="#38bdf8" fill-opacity="0.5"/>
+    <rect x="30" y="38" width="10" height="32" rx="3" fill="#38bdf8" fill-opacity="0.8"/>
+    <rect x="46" y="24" width="10" height="46" rx="3" fill="url(#primaryGrad)"/>
+    <rect x="62" y="14" width="10" height="56" rx="3" fill="url(#accentGrad)"/>
+    <!-- Trend Line -->
+    <polyline points="19,50 35,36 51,22 67,12" fill="none" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="67" cy="12" r="3.5" fill="#38bdf8"/>
+  </g>
+</svg>
