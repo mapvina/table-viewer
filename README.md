@@ -89,7 +89,8 @@ The extension can be customized via VS Code `settings.json`:
   "tableViewer.autoDetectDelimiter": true,
   "tableViewer.allowEditing": true,
   "tableViewer.minColumnWidth": 80,
-  "tableViewer.maxColumnWidth": 320
+  "tableViewer.maxColumnWidth": 320,
+  "tableViewer.rowHeight": 28
 }
 ```
 

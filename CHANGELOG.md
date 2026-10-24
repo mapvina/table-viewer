@@ -27,4 +27,5 @@ All notable changes to the "Table Viewer" extension will be documented in this f
 - **Grid Layout Controls**:
   - Double-click column border to auto-fit content width.
   - Global auto-fit toggle with configurable bounds (`tableViewer.minColumnWidth`, `tableViewer.maxColumnWidth`).
+  - Configurable row height (`tableViewer.rowHeight`).
   - Text wrapping and zebra row striping toggles.

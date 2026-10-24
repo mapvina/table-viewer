@@ -43,7 +43,8 @@ export class CsvEditorProvider implements vscode.CustomTextEditorProvider {
         autoDetectDelimiter: config.get<boolean>('autoDetectDelimiter', true),
         allowEditing: config.get<boolean>('allowEditing', true),
         minColumnWidth: config.get<number>('minColumnWidth', 80),
-        maxColumnWidth: config.get<number>('maxColumnWidth', 320)
+        maxColumnWidth: config.get<number>('maxColumnWidth', 320),
+        rowHeight: config.get<number>('rowHeight', 28)
       };
     };
 

@@ -31,7 +31,8 @@ class TableViewerApp {
     autoDetectDelimiter: true,
     allowEditing: true,
     minColumnWidth: 80,
-    maxColumnWidth: 320
+    maxColumnWidth: 320,
+    rowHeight: 28
   };
 
   private activeSheetName = '';
@@ -62,7 +63,7 @@ class TableViewerApp {
   private initElements(): void {
     const gridContainer = document.getElementById('grid-container')!;
     this.grid = new VirtualGrid(gridContainer, {
-      rowHeight: 28,
+      rowHeight: this.options.rowHeight || 28,
       overscan: 15,
       allowEditing: this.options.allowEditing,
       minColumnWidth: this.options.minColumnWidth,
@@ -102,6 +103,9 @@ class TableViewerApp {
     this.options = options;
     if (this.grid) {
       this.grid.setColumnWidthBounds(options.minColumnWidth, options.maxColumnWidth);
+      if (options.rowHeight) {
+        this.grid.setRowHeight(options.rowHeight);
+      }
     }
     this.activeSheetName = data.activeSheet || data.sheetNames[0] || 'Sheet1';
 

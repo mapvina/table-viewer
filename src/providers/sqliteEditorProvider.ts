@@ -57,7 +57,8 @@ export class SqliteEditorProvider implements vscode.CustomReadonlyEditorProvider
         autoDetectDelimiter: false,
         allowEditing: false, // Read-only for SQLite
         minColumnWidth: config.get<number>('minColumnWidth', 80),
-        maxColumnWidth: config.get<number>('maxColumnWidth', 320)
+        maxColumnWidth: config.get<number>('maxColumnWidth', 320),
+        rowHeight: config.get<number>('rowHeight', 28)
       };
     };
 

@@ -51,6 +51,7 @@ export interface ExtensionOptions {
   allowEditing: boolean;
   minColumnWidth?: number;
   maxColumnWidth?: number;
+  rowHeight?: number;
 }
 
 export interface ColumnStats {

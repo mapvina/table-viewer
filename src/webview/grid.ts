@@ -68,13 +68,26 @@ export class VirtualGrid {
       onSelectionChange: options.onSelectionChange,
       onDeleteRows: options.onDeleteRows
     };
-    this.rowHeight = this.options.rowHeight;
+    this.baseRowHeight = options.rowHeight || 28;
+    this.wrappedRowHeight = Math.max(46, Math.round(this.baseRowHeight * 1.6));
+    this.rowHeight = this.baseRowHeight;
     this.overscan = this.options.overscan;
     this.minColWidth = options.minColumnWidth ?? 80;
     this.maxColWidth = options.maxColumnWidth ?? 320;
 
     this.initDOM();
     this.attachEvents();
+  }
+
+  public setRowHeight(height?: number): void {
+    if (typeof height === 'number' && height >= 18) {
+      this.baseRowHeight = height;
+      this.wrappedRowHeight = Math.max(height + 16, Math.round(height * 1.6));
+      this.rowHeight = this.isWrapText ? this.wrappedRowHeight : this.baseRowHeight;
+      this.updateDimensions();
+      this.renderHeader();
+      this.renderVisibleRows();
+    }
   }
 
   public setColumnWidthBounds(minWidth?: number, maxWidth?: number): void {
