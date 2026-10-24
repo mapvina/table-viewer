@@ -103,6 +103,24 @@ export class SqliteEditorProvider implements vscode.CustomReadonlyEditorProvider
           vscode.window.showErrorMessage(msg.payload.message);
           break;
         }
+
+        case 'updateSettings': {
+          try {
+            const config = vscode.workspace.getConfiguration('tableViewer');
+            if (msg.payload.rowHeight !== undefined) {
+              await config.update('rowHeight', msg.payload.rowHeight, vscode.ConfigurationTarget.Global);
+            }
+            if (msg.payload.minColumnWidth !== undefined) {
+              await config.update('minColumnWidth', msg.payload.minColumnWidth, vscode.ConfigurationTarget.Global);
+            }
+            if (msg.payload.maxColumnWidth !== undefined) {
+              await config.update('maxColumnWidth', msg.payload.maxColumnWidth, vscode.ConfigurationTarget.Global);
+            }
+          } catch (err) {
+            console.error('Failed to persist settings:', err);
+          }
+          break;
+        }
       }
     });
 

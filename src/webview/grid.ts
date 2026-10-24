@@ -99,6 +99,10 @@ export class VirtualGrid {
     }
   }
 
+  public setAllowEditing(allow: boolean): void {
+    this.options.allowEditing = allow;
+  }
+
   private initDOM(): void {
     this.container.innerHTML = '';
 

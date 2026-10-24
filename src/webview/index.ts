@@ -531,8 +531,32 @@ class TableViewerApp {
     document.getElementById('btn-settings')?.addEventListener('click', () => {
       settingsModal.style.display = 'flex';
       const delimSelect = document.getElementById('setting-delimiter') as HTMLSelectElement;
+      const delimGroup = document.getElementById('setting-delimiter-group');
       if (delimSelect && this.documentData) {
         delimSelect.value = this.documentData.delimiter || ',';
+        if (delimGroup) {
+          delimGroup.style.display = (this.documentData.format === 'csv' || this.documentData.format === 'tsv') ? 'flex' : 'none';
+        }
+      }
+      const rowHeightInput = document.getElementById('setting-row-height') as HTMLInputElement;
+      if (rowHeightInput) {
+        rowHeightInput.value = String(this.options.rowHeight || 28);
+      }
+      const minColWidthInput = document.getElementById('setting-min-col-width') as HTMLInputElement;
+      if (minColWidthInput) {
+        minColWidthInput.value = String(this.options.minColumnWidth || 80);
+      }
+      const maxColWidthInput = document.getElementById('setting-max-col-width') as HTMLInputElement;
+      if (maxColWidthInput) {
+        maxColWidthInput.value = String(this.options.maxColumnWidth || 320);
+      }
+      const editableCheckbox = document.getElementById('setting-editable') as HTMLInputElement;
+      if (editableCheckbox) {
+        editableCheckbox.checked = this.options.allowEditing !== false;
+      }
+      const hasHeaderCheckbox = document.getElementById('setting-has-header') as HTMLInputElement;
+      if (hasHeaderCheckbox) {
+        hasHeaderCheckbox.checked = this.options.hasHeader !== false;
       }
     });
 
@@ -541,11 +565,52 @@ class TableViewerApp {
     });
 
     document.getElementById('btn-save-settings')?.addEventListener('click', () => {
+      const rowHeightInput = document.getElementById('setting-row-height') as HTMLInputElement;
+      const minColWidthInput = document.getElementById('setting-min-col-width') as HTMLInputElement;
+      const maxColWidthInput = document.getElementById('setting-max-col-width') as HTMLInputElement;
+      const editableCheckbox = document.getElementById('setting-editable') as HTMLInputElement;
       const delimSelect = document.getElementById('setting-delimiter') as HTMLSelectElement;
-      if (delimSelect && this.documentData) {
-        this.documentData.delimiter = delimSelect.value;
-        this.triggerSave();
+
+      const newRowHeight = rowHeightInput ? parseInt(rowHeightInput.value, 10) : undefined;
+      const newMinColWidth = minColWidthInput ? parseInt(minColWidthInput.value, 10) : undefined;
+      const newMaxColWidth = maxColWidthInput ? parseInt(maxColWidthInput.value, 10) : undefined;
+      const newEditable = editableCheckbox ? editableCheckbox.checked : undefined;
+
+      const updatedSettings: Partial<ExtensionOptions> = {};
+
+      if (newRowHeight && newRowHeight >= 20 && newRowHeight <= 120) {
+        this.options.rowHeight = newRowHeight;
+        this.grid.setRowHeight(newRowHeight);
+        updatedSettings.rowHeight = newRowHeight;
       }
+
+      if (newMinColWidth && newMaxColWidth && newMinColWidth <= newMaxColWidth) {
+        this.options.minColumnWidth = newMinColWidth;
+        this.options.maxColumnWidth = newMaxColWidth;
+        this.grid.setColumnWidthBounds(newMinColWidth, newMaxColWidth);
+        this.grid.autoFitAllColumns();
+        updatedSettings.minColumnWidth = newMinColWidth;
+        updatedSettings.maxColumnWidth = newMaxColWidth;
+      }
+
+      if (newEditable !== undefined) {
+        this.options.allowEditing = newEditable;
+        this.grid.setAllowEditing(newEditable);
+        updatedSettings.allowEditing = newEditable;
+      }
+
+      if (delimSelect && this.documentData && (this.documentData.format === 'csv' || this.documentData.format === 'tsv')) {
+        if (this.documentData.delimiter !== delimSelect.value) {
+          this.documentData.delimiter = delimSelect.value;
+          this.triggerSave();
+        }
+      }
+
+      vscode.postMessage({
+        type: 'updateSettings',
+        payload: updatedSettings
+      });
+
       settingsModal.style.display = 'none';
     });
 

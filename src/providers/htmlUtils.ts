@@ -196,7 +196,7 @@ export function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri
           <button id="close-settings-modal" class="icon-btn">✕</button>
         </div>
         <div class="modal-body">
-          <div class="setting-item">
+          <div class="setting-item" id="setting-delimiter-group">
             <label for="setting-delimiter">Delimiter:</label>
             <select id="setting-delimiter">
               <option value=",">Comma (,)</option>
@@ -204,6 +204,18 @@ export function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri
               <option value="&#9;">Tab (\t)</option>
               <option value="|">Pipe (|)</option>
             </select>
+          </div>
+          <div class="setting-item">
+            <label for="setting-row-height">Row Height (px):</label>
+            <input type="number" id="setting-row-height" min="20" max="120" step="2" value="28" />
+          </div>
+          <div class="setting-item">
+            <label for="setting-min-col-width">Min Column Width (px):</label>
+            <input type="number" id="setting-min-col-width" min="30" max="500" step="5" value="80" />
+          </div>
+          <div class="setting-item">
+            <label for="setting-max-col-width">Max Column Width (px):</label>
+            <input type="number" id="setting-max-col-width" min="60" max="2000" step="10" value="320" />
           </div>
           <div class="setting-item checkbox-item">
             <input type="checkbox" id="setting-has-header" checked />

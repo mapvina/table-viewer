@@ -798,6 +798,23 @@ body, html {
   margin-bottom: 14px;
 }
 
+.setting-item input[type="number"] {
+  background-color: var(--input-bg);
+  color: var(--input-fg);
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+  width: 90px;
+  text-align: right;
+  outline: none;
+}
+
+.setting-item input[type="number"]:focus,
+.setting-item select:focus {
+  border-color: var(--accent);
+}
+
 .checkbox-item {
   justify-content: flex-start;
   gap: 10px;

@@ -91,4 +91,5 @@ export type WebviewToHostMessage =
   | { type: 'save'; payload: { sheets: { [sheetName: string]: SheetData }; activeSheet: string; delimiter?: string } }
   | { type: 'export'; payload: { format: 'csv' | 'tsv' | 'json' | 'xlsx' | 'html'; sheetName: string; headers: string[]; rows: TableCellValue[][] } }
   | { type: 'showInfo'; payload: { message: string } }
-  | { type: 'showError'; payload: { message: string } };
+  | { type: 'showError'; payload: { message: string } }
+  | { type: 'updateSettings'; payload: Partial<ExtensionOptions> };
