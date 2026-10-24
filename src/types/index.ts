@@ -49,6 +49,8 @@ export interface ExtensionOptions {
   hasHeader: boolean;
   autoDetectDelimiter: boolean;
   allowEditing: boolean;
+  minColumnWidth?: number;
+  maxColumnWidth?: number;
 }
 
 export interface ColumnStats {

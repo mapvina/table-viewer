@@ -98,7 +98,9 @@ export class ExcelEditorProvider implements vscode.CustomEditorProvider<ExcelDoc
         enableVirtualization: config.get<boolean>('enableVirtualization', true),
         hasHeader: config.get<boolean>('hasHeader', true),
         autoDetectDelimiter: config.get<boolean>('autoDetectDelimiter', true),
-        allowEditing: config.get<boolean>('allowEditing', true)
+        allowEditing: config.get<boolean>('allowEditing', true),
+        minColumnWidth: config.get<number>('minColumnWidth', 80),
+        maxColumnWidth: config.get<number>('maxColumnWidth', 320)
       };
     };
 

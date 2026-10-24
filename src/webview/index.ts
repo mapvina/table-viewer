@@ -29,7 +29,9 @@ class TableViewerApp {
     enableVirtualization: true,
     hasHeader: true,
     autoDetectDelimiter: true,
-    allowEditing: true
+    allowEditing: true,
+    minColumnWidth: 80,
+    maxColumnWidth: 320
   };
 
   private activeSheetName = '';
@@ -63,6 +65,8 @@ class TableViewerApp {
       rowHeight: 28,
       overscan: 15,
       allowEditing: this.options.allowEditing,
+      minColumnWidth: this.options.minColumnWidth,
+      maxColumnWidth: this.options.maxColumnWidth,
       onCellChange: (rowIdx, colIdx, newVal) => {
         this.handleCellChange(rowIdx, colIdx, newVal);
       },
@@ -96,6 +100,9 @@ class TableViewerApp {
   public loadData(data: TableDocumentData, options: ExtensionOptions, title: string): void {
     this.documentData = data;
     this.options = options;
+    if (this.grid) {
+      this.grid.setColumnWidthBounds(options.minColumnWidth, options.maxColumnWidth);
+    }
     this.activeSheetName = data.activeSheet || data.sheetNames[0] || 'Sheet1';
 
     // Update UI title and badges

@@ -53,7 +53,7 @@ export function getWebviewHtml(webview: vscode.Webview, extensionUri: vscode.Uri
       </div>
 
       <div class="toolbar-section toolbar-right">
-        <button id="btn-autofit" class="btn" title="Auto-fit all columns to content width (Min: 80px, Max: 320px)">Auto Fit ↔</button>
+        <button id="btn-autofit" class="btn" title="Auto-fit all columns to content width">Auto Fit ↔</button>
         <button id="btn-wrap" class="btn tool-toggle" title="Toggle text wrapping">Wrap ↵</button>
         <button id="btn-zebra" class="btn tool-toggle active" title="Toggle alternating row colors">Zebra 🦓</button>
         <button id="btn-add-row" class="btn" title="Add New Row at the end">+ Row</button>

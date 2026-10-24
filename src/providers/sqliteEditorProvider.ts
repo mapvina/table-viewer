@@ -55,7 +55,9 @@ export class SqliteEditorProvider implements vscode.CustomReadonlyEditorProvider
         enableVirtualization: config.get<boolean>('enableVirtualization', true),
         hasHeader: true,
         autoDetectDelimiter: false,
-        allowEditing: false // Read-only for SQLite
+        allowEditing: false, // Read-only for SQLite
+        minColumnWidth: config.get<number>('minColumnWidth', 80),
+        maxColumnWidth: config.get<number>('maxColumnWidth', 320)
       };
     };
 

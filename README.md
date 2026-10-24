@@ -50,7 +50,7 @@ Table Viewer provides a unified, responsive interface to inspect, filter, visual
 - Interactive hover tooltips displaying values and percentage shares with high-DPI canvas scaling.
 
 ### 6. Auto-Fit and Text Wrapping
-- Automatic column width calculation bounded by `[80px, 320px]` constraints to prevent viewport overflow.
+- Configurable automatic column width calculation bounded by `minColumnWidth` and `maxColumnWidth` constraints.
 - Double-click column header boundary to auto-fit individual columns to content width.
 - Optional multi-line text wrapping (`Wrap`) for long text and descriptions.
 - Alternating row styling (`Zebra`) for readability across wide screens.
@@ -87,7 +87,9 @@ The extension can be customized via VS Code `settings.json`:
   "tableViewer.defaultPageSize": 100,
   "tableViewer.hasHeader": true,
   "tableViewer.autoDetectDelimiter": true,
-  "tableViewer.allowEditing": true
+  "tableViewer.allowEditing": true,
+  "tableViewer.minColumnWidth": 80,
+  "tableViewer.maxColumnWidth": 320
 }
 ```
 

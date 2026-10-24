@@ -141,6 +141,20 @@
           "type": "boolean",
           "default": true,
           "description": "Enable in-place cell editing."
+        },
+        "tableViewer.minColumnWidth": {
+          "type": "number",
+          "default": 80,
+          "minimum": 30,
+          "maximum": 500,
+          "description": "Minimum column width in pixels for auto-fit and column resizing."
+        },
+        "tableViewer.maxColumnWidth": {
+          "type": "number",
+          "default": 320,
+          "minimum": 60,
+          "maximum": 2000,
+          "description": "Maximum column width in pixels for auto-fit."
         }
       }
     }

@@ -4,6 +4,8 @@ export interface GridOptions {
   rowHeight: number;
   overscan: number;
   allowEditing: boolean;
+  minColumnWidth?: number;
+  maxColumnWidth?: number;
   onCellChange?: (rowIdx: number, colIdx: number, newVal: string) => void;
   onSortChange?: (colIdx: number) => void;
   onColumnHeaderClick?: (colIdx: number) => void;
@@ -36,8 +38,8 @@ export class VirtualGrid {
   private zebraStriping = true;
   private isWrapText = false;
 
-  private readonly MIN_COL_WIDTH = 80;
-  private readonly MAX_COL_WIDTH = 320;
+  private minColWidth = 80;
+  private maxColWidth = 320;
 
   private selection: SelectionRange | null = null;
   private activeCell: { row: number; col: number } | null = null;
@@ -68,9 +70,20 @@ export class VirtualGrid {
     };
     this.rowHeight = this.options.rowHeight;
     this.overscan = this.options.overscan;
+    this.minColWidth = options.minColumnWidth ?? 80;
+    this.maxColWidth = options.maxColumnWidth ?? 320;
 
     this.initDOM();
     this.attachEvents();
+  }
+
+  public setColumnWidthBounds(minWidth?: number, maxWidth?: number): void {
+    if (typeof minWidth === 'number' && minWidth > 0) {
+      this.minColWidth = minWidth;
+    }
+    if (typeof maxWidth === 'number' && maxWidth >= this.minColWidth) {
+      this.maxColWidth = maxWidth;
+    }
   }
 
   private initDOM(): void {
@@ -131,7 +144,7 @@ export class VirtualGrid {
         }
       }
     }
-    const idealWidth = Math.min(Math.max(Math.ceil(maxLen * 8.5) + 30, this.MIN_COL_WIDTH), this.MAX_COL_WIDTH);
+    const idealWidth = Math.min(Math.max(Math.ceil(maxLen * 8.5) + 30, this.minColWidth), this.maxColWidth);
     this.columnWidths[colIdx] = idealWidth;
     this.updateDimensions();
     this.renderHeader();
@@ -158,7 +171,7 @@ export class VirtualGrid {
           }
         }
       }
-      return Math.min(Math.max(Math.ceil(maxLen * 8.5) + 30, this.MIN_COL_WIDTH), this.MAX_COL_WIDTH);
+      return Math.min(Math.max(Math.ceil(maxLen * 8.5) + 30, this.minColWidth), this.maxColWidth);
     });
   }
 
@@ -280,7 +293,7 @@ export class VirtualGrid {
     const onMouseMove = (e: MouseEvent) => {
       if (!this.isDraggingColumn) return;
       const delta = e.clientX - this.dragStartX;
-      const newWidth = Math.max(this.dragStartWidth + delta, 50);
+      const newWidth = Math.max(this.dragStartWidth + delta, Math.min(this.minColWidth, 30));
       this.columnWidths[this.dragColIdx] = newWidth;
       this.updateDimensions();
       this.renderHeader();
