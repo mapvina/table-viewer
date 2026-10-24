@@ -1,32 +1,30 @@
-import * as XLSX from 'xlsx';
+import readXlsxFile from 'read-excel-file/universal';
+import writeXlsxFile, { type Row as WriteRow, type Sheet as WriteSheet } from 'write-excel-file/node';
 import { SheetData, TableCellValue, TableDocumentData } from '../types';
 
 export class ExcelParser {
   /**
-   * Parses an Excel buffer into TableDocumentData with all sheets.
+   * Parses an Excel (.xlsx) buffer into TableDocumentData with all sheets.
    */
-  public static parse(data: Uint8Array, fileName: string): TableDocumentData {
-    const workbook = XLSX.read(data, {
-      type: 'array',
-      cellDates: true,
-      dense: false
-    });
+  public static async parse(data: Uint8Array, fileName: string): Promise<TableDocumentData> {
+    const arrayBuffer = data.buffer.slice(
+      data.byteOffset,
+      data.byteOffset + data.byteLength
+    ) as ArrayBuffer;
 
-    const sheetNames = workbook.SheetNames || [];
+    const parsedSheets = await readXlsxFile(arrayBuffer);
+
+    const sheetNames: string[] = [];
     const sheets: { [name: string]: SheetData } = {};
 
-    for (const name of sheetNames) {
-      const worksheet = workbook.Sheets[name];
-      if (!worksheet) {
-        continue;
-      }
+    for (const item of parsedSheets) {
+      const name = item.sheet;
+      sheetNames.push(name);
 
-      // Convert sheet to array of arrays
-      const rawRows: any[][] = XLSX.utils.sheet_to_json(worksheet, {
-        header: 1,
-        defval: '',
-        blankrows: false
-      });
+      // Filter out completely empty rows (simulating blankrows: false)
+      const rawRows = (item.data || []).filter(row =>
+        Array.isArray(row) && row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== '')
+      );
 
       let maxCols = 0;
       for (const r of rawRows) {
@@ -59,7 +57,7 @@ export class ExcelParser {
             if (cell instanceof Date) {
               normalizedRow.push(cell.toISOString().split('T')[0]);
             } else if (cell !== undefined && cell !== null) {
-              normalizedRow.push(cell);
+              normalizedRow.push(cell as TableCellValue);
             } else {
               normalizedRow.push('');
             }
@@ -96,40 +94,62 @@ export class ExcelParser {
   }
 
   /**
-   * Serializes all sheets or active sheet back into an Excel binary Uint8Array
+   * Serializes all sheets back into an Excel (.xlsx) binary Uint8Array
    */
-  public static serialize(sheets: { [sheetName: string]: SheetData }, activeSheetName?: string): Uint8Array {
-    const workbook = XLSX.utils.book_new();
-
+  public static async serialize(
+    sheets: { [sheetName: string]: SheetData },
+    _activeSheetName?: string
+  ): Promise<Uint8Array> {
     const names = Object.keys(sheets);
+    const writeSheets: WriteSheet<Buffer>[] = [];
+
     for (const name of names) {
       const sheetData = sheets[name];
-      const aoa: any[][] = [sheetData.headers, ...sheetData.rows];
-      const worksheet = XLSX.utils.aoa_to_sheet(aoa);
+
+      const headerRow: WriteRow = sheetData.headers.map(h => ({
+        value: String(h ?? ''),
+        type: String,
+        fontWeight: 'bold'
+      }));
+
+      const dataRows: WriteRow[] = sheetData.rows.map(row =>
+        sheetData.headers.map((_, colIdx) => {
+          const cell = row[colIdx];
+          if (cell === null || cell === undefined || cell === '') {
+            return null;
+          }
+          if (typeof cell === 'number') {
+            return { value: cell, type: Number };
+          }
+          if (typeof cell === 'boolean') {
+            return { value: cell, type: Boolean };
+          }
+          return { value: String(cell), type: String };
+        })
+      );
 
       // Auto-fit column widths approximately
-      const colWidths = sheetData.headers.map((h, colIdx) => {
+      const columns = sheetData.headers.map((h, colIdx) => {
         let maxLen = String(h).length;
         const sampleLimit = Math.min(sheetData.rows.length, 50);
         for (let r = 0; r < sampleLimit; r++) {
-          const val = sheetData.rows[r][colIdx];
+          const val = sheetData.rows[r]?.[colIdx];
           const len = val !== null && val !== undefined ? String(val).length : 0;
           if (len > maxLen) {
             maxLen = len;
           }
         }
-        return { wch: Math.min(Math.max(maxLen + 3, 10), 50) };
+        return { width: Math.min(Math.max(maxLen + 3, 10), 50) };
       });
-      worksheet['!cols'] = colWidths;
 
-      XLSX.utils.book_append_sheet(workbook, worksheet, name.slice(0, 31)); // Excel max sheet name is 31 chars
+      writeSheets.push({
+        sheet: name.slice(0, 31), // Excel max sheet name is 31 chars
+        data: [headerRow, ...dataRows],
+        columns
+      });
     }
 
-    const buffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'buffer'
-    });
-
+    const buffer = await writeXlsxFile(writeSheets).toBuffer();
     return new Uint8Array(buffer);
   }
 }

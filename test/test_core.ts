@@ -74,13 +74,13 @@ async function runTests() {
       }
     };
 
-    const buffer = ExcelParser.serialize(sampleSheets, 'Sales');
+    const buffer = await ExcelParser.serialize(sampleSheets, 'Sales');
     assert.ok(buffer instanceof Uint8Array);
     assert.ok(buffer.length > 0);
     console.log(`✓ Serialized multi-sheet Excel workbook (${buffer.length} bytes)`);
 
     // Parse back
-    const roundTripDoc = ExcelParser.parse(buffer, 'report.xlsx');
+    const roundTripDoc = await ExcelParser.parse(buffer, 'report.xlsx');
     assert.strictEqual(roundTripDoc.sheetNames.length, 2);
     assert.ok(roundTripDoc.sheetNames.includes('Sales'));
     assert.ok(roundTripDoc.sheetNames.includes('Expenses'));

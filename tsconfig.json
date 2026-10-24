@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "target": "ES2023",
+    "lib": ["ES2023", "DOM"],
     "outDir": "out",
-    "rootDir": "src",
+    "rootDir": ".",
     "sourceMap": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node"
+    "moduleResolution": "bundler",
+    "types": ["node", "vscode"]
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }

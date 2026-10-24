@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ExcelParser } from '../src/core/excelParser';
 import { SheetData } from '../src/types';
 
-function createFixtures() {
+async function createFixtures() {
   const fixturesDir = path.join(__dirname, 'fixtures');
   if (!fs.existsSync(fixturesDir)) {
     fs.mkdirSync(fixturesDir, { recursive: true });
@@ -62,7 +62,7 @@ function createFixtures() {
     }
   };
 
-  const excelBuffer = ExcelParser.serialize(excelSheets, 'Quarterly_Revenue');
+  const excelBuffer = await ExcelParser.serialize(excelSheets, 'Quarterly_Revenue');
   fs.writeFileSync(path.join(fixturesDir, 'sample_financials.xlsx'), excelBuffer);
   console.log('✓ Created sample_financials.xlsx');
 

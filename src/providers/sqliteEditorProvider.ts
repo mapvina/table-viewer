@@ -168,7 +168,7 @@ export class SqliteEditorProvider implements vscode.CustomReadonlyEditorProvider
       case 'xlsx':
         ext = 'xlsx';
         filters = { 'Excel Files': ['xlsx'] };
-        content = TableExporter.toExcel(payload.sheetName, sheetData);
+        content = await TableExporter.toExcel(payload.sheetName, sheetData);
         break;
     }
 

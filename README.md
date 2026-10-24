@@ -17,7 +17,7 @@ Table Viewer provides a unified, responsive interface to inspect, filter, visual
 ### Supported File Formats
 
 - **Delimited Text**: `.csv`, `.tsv`, `.tab` (with automatic delimiter detection for comma, semicolon, tab, and pipe)
-- **Spreadsheets**: `.xlsx`, `.xls`, `.xlsm`, `.xlsb` (multi-sheet support)
+- **Spreadsheets**: `.xlsx` (multi-sheet support)
 - **Relational Databases**: `.db`, `.sqlite`, `.sqlite3` (multi-table and view support via WebAssembly engine)
 
 ---
@@ -116,7 +116,7 @@ npm run package
 
 ### Install into VS Code:
 ```bash
-code --install-extension table-viewer-1.0.0.vsix
+code --install-extension table-viewer-1.1.0.vsix
 ```
 
 ---

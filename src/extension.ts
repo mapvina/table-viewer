@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
         canSelectFolders: false,
         canSelectMany: false,
         filters: {
-          'Table Files': ['csv', 'tsv', 'xlsx', 'xls', 'xlsm', 'db', 'sqlite', 'sqlite3']
+          'Table Files': ['csv', 'tsv', 'xlsx', 'db', 'sqlite', 'sqlite3']
         }
       });
       if (selected && selected[0]) {
@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (targetUri) {
       const ext = targetUri.path.split('.').pop()?.toLowerCase();
-      if (ext === 'xlsx' || ext === 'xls' || ext === 'xlsm' || ext === 'xlsb') {
+      if (ext === 'xlsx') {
         await vscode.commands.executeCommand('vscode.openWith', targetUri, ExcelEditorProvider.viewType);
       } else if (ext === 'db' || ext === 'sqlite' || ext === 'sqlite3') {
         await vscode.commands.executeCommand('vscode.openWith', targetUri, SqliteEditorProvider.viewType);

@@ -77,7 +77,7 @@ ${rowsHtml}
 </html>`;
   }
 
-  public static toExcel(sheetName: string, data: SheetData): Uint8Array {
+  public static async toExcel(sheetName: string, data: SheetData): Promise<Uint8Array> {
     return ExcelParser.serialize({ [sheetName || 'Sheet1']: data }, sheetName);
   }
 }

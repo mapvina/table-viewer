@@ -1,8 +1,8 @@
 {
   "name": "table-viewer",
   "displayName": "Table Viewer",
-  "description": "Interactive, high-performance data table viewer and editor for CSV, TSV, Excel (.xlsx, .xls), and SQLite (.db, .sqlite) files.",
-  "version": "1.0.0",
+  "description": "Interactive, high-performance data table viewer and editor for CSV, TSV, Excel (.xlsx), and SQLite (.db, .sqlite) files.",
+  "version": "1.1.0",
   "publisher": "mapvina",
   "author": "MapVina",
   "icon": "assets/icon.png",
@@ -60,15 +60,6 @@
         "selector": [
           {
             "filenamePattern": "*.xlsx"
-          },
-          {
-            "filenamePattern": "*.xls"
-          },
-          {
-            "filenamePattern": "*.xlsm"
-          },
-          {
-            "filenamePattern": "*.xlsb"
           }
         ],
         "priority": "default"
@@ -102,14 +93,14 @@
       "explorer/context": [
         {
           "command": "tableViewer.openTableViewer",
-          "when": "resourceExtname == .csv || resourceExtname == .tsv || resourceExtname == .tab || resourceExtname == .xlsx || resourceExtname == .xls || resourceExtname == .xlsm || resourceExtname == .xlsb || resourceExtname == .db || resourceExtname == .sqlite || resourceExtname == .sqlite3",
+          "when": "resourceExtname == .csv || resourceExtname == .tsv || resourceExtname == .tab || resourceExtname == .xlsx || resourceExtname == .db || resourceExtname == .sqlite || resourceExtname == .sqlite3",
           "group": "navigation"
         }
       ],
       "editor/title": [
         {
           "command": "tableViewer.openTableViewer",
-          "when": "resourceExtname == .csv || resourceExtname == .tsv || resourceExtname == .tab || resourceExtname == .xlsx || resourceExtname == .xls || resourceExtname == .xlsm || resourceExtname == .xlsb || resourceExtname == .db || resourceExtname == .sqlite || resourceExtname == .sqlite3",
+          "when": "resourceExtname == .csv || resourceExtname == .tsv || resourceExtname == .tab || resourceExtname == .xlsx || resourceExtname == .db || resourceExtname == .sqlite || resourceExtname == .sqlite3",
           "group": "navigation"
         }
       ]
@@ -169,8 +160,8 @@
   "scripts": {
     "vscode:prepublish": "npm run build",
     "compile": "tsc -p ./ --noEmit",
-    "build:extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --target=node18",
-    "build:webview": "esbuild ./src/webview/index.ts --bundle --outfile=dist/webview.js --format=iife --sourcemap --target=chrome100",
+    "build:extension": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --target=node20",
+    "build:webview": "esbuild ./src/webview/index.ts --bundle --outfile=dist/webview.js --format=iife --sourcemap --target=chrome120",
     "build:css": "cp src/webview/style.css dist/style.css",
     "build:wasm": "cp node_modules/sql.js/dist/sql-wasm.wasm dist/sql-wasm.wasm",
     "build": "npm run build:extension && npm run build:webview && npm run build:css && npm run build:wasm",
@@ -178,20 +169,21 @@
     "test": "npx esbuild test/test_core.ts --bundle --platform=node --outfile=dist-test/test_core.js && node dist-test/test_core.js"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
-    "@types/papaparse": "^5.3.15",
+    "@types/node": "^24.0.0",
+    "@types/papaparse": "^5.5.2",
     "@types/sql.js": "^1.4.11",
     "@types/vscode": "^1.85.0",
     "@vscode/vsce": "^4.0.0",
-    "esbuild": "^0.25.0",
-    "typescript": "^5.8.0"
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
   },
   "dependencies": {
-    "papaparse": "^5.5.2",
+    "papaparse": "^5.7.0",
+    "read-excel-file": "^9.3.12",
     "sql.js": "^1.15.1",
-    "xlsx": "^0.18.5"
+    "write-excel-file": "^4.1.1"
   },
-  "allowScripts": {
-    "esbuild@0.25.12": true
+  "overrides": {
+    "@azure/msal-node": "^7.1.1"
   }
 }

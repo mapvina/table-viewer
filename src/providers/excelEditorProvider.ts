@@ -13,10 +13,15 @@ export class ExcelDocument implements vscode.CustomDocument {
   private readonly _onDidChange = new vscode.EventEmitter<vscode.CustomDocumentEditEvent>();
   public readonly onDidChange = this._onDidChange.event;
 
-  constructor(uri: vscode.Uri, initialData: Uint8Array) {
+  constructor(uri: vscode.Uri, initialData: Uint8Array, tableData: TableDocumentData) {
     this._uri = uri;
     this._data = initialData;
-    this._tableData = ExcelParser.parse(initialData, uri.fsPath);
+    this._tableData = tableData;
+  }
+
+  public static async create(uri: vscode.Uri, initialData: Uint8Array): Promise<ExcelDocument> {
+    const tableData = await ExcelParser.parse(initialData, uri.fsPath);
+    return new ExcelDocument(uri, initialData, tableData);
   }
 
   public get uri(): vscode.Uri {
@@ -35,10 +40,10 @@ export class ExcelDocument implements vscode.CustomDocument {
     return this._isDirty;
   }
 
-  public updateData(sheets: { [sheetName: string]: SheetData }, activeSheet: string): void {
+  public async updateData(sheets: { [sheetName: string]: SheetData }, activeSheet: string): Promise<void> {
     this._tableData.sheets = sheets;
     this._tableData.activeSheet = activeSheet;
-    this._data = ExcelParser.serialize(sheets, activeSheet);
+    this._data = await ExcelParser.serialize(sheets, activeSheet);
     this._isDirty = true;
   }
 
@@ -75,7 +80,7 @@ export class ExcelEditorProvider implements vscode.CustomEditorProvider<ExcelDoc
     _token: vscode.CancellationToken
   ): Promise<ExcelDocument> {
     const data = await vscode.workspace.fs.readFile(uri);
-    return new ExcelDocument(uri, data);
+    return ExcelDocument.create(uri, data);
   }
 
   public async resolveCustomEditor(
@@ -127,7 +132,7 @@ export class ExcelEditorProvider implements vscode.CustomEditorProvider<ExcelDoc
 
         case 'save': {
           try {
-            document.updateData(msg.payload.sheets, msg.payload.activeSheet);
+            await document.updateData(msg.payload.sheets, msg.payload.activeSheet);
             await vscode.workspace.fs.writeFile(document.uri, document.data);
             document.markClean();
             webview.postMessage({
@@ -209,7 +214,8 @@ export class ExcelEditorProvider implements vscode.CustomEditorProvider<ExcelDoc
     _cancellation: vscode.CancellationToken
   ): Promise<void> {
     const data = await vscode.workspace.fs.readFile(document.uri);
-    document['updateData'](ExcelParser.parse(data, document.uri.fsPath).sheets, document.tableData.activeSheet);
+    const parsed = await ExcelParser.parse(data, document.uri.fsPath);
+    await document.updateData(parsed.sheets, document.tableData.activeSheet);
     document.markClean();
   }
 
@@ -270,7 +276,7 @@ export class ExcelEditorProvider implements vscode.CustomEditorProvider<ExcelDoc
       case 'xlsx':
         ext = 'xlsx';
         filters = { 'Excel Files': ['xlsx'] };
-        content = TableExporter.toExcel(payload.sheetName, sheetData);
+        content = await TableExporter.toExcel(payload.sheetName, sheetData);
         break;
     }
 
